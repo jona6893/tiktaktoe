@@ -1,0 +1,58 @@
+
+*{
+    margin: 0;
+}
+body{
+    background-color: slategray;
+}
+
+main{
+        display: flex;
+    justify-items: center;
+    align-items: center;
+    height: 80vh;
+    flex-direction: column;
+}
+h1{
+    color: ghostwhite;
+    font-size: 2rem;
+    padding: 10px 0%;
+}
+#gameboard{
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+   width: 500px;
+   height: 500px;
+    aspect-ratio: 1/1;
+    background-color: ghostwhite;
+}
+
+
+#gameboard div{
+    width: 100%;
+    height: 100%;
+    border: solid 1px black;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    font-size: 3rem;
+}
+
+.select{
+    position: absolute;
+        top: 47%;
+    left: 28%;
+    text-align: center;
+}
+.win{
+    position: absolute;
+        top: 47%;
+    left: 43%;
+    text-align: center;
+}
+
+
+.hide{
+    display: none;
+}

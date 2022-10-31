@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <main>
+        <button class="playx">Player X</button>
+        <button class="playo">Player O</button>
+    </main>
+  </body>
+  <script>
+    window.addEventListener("DOMContentLoaded", (event) => {
+      /* build layout */
+      const section = document.createElement("section");
+      section.style.display = "grid";
+      section.style.gridTemplateColumns = "168px 168px 168px";
+      section.style.gridTemplateRows = "168px 168px 168px";
+      section.style.backgroundColor = "pink";
+      section.style.height = "500px";
+      section.style.width = "500px";
+      section.style.justifyItems = "center";
+      section.style.alignItems = "center";
+
+      document.querySelector("main").appendChild(section);
+
+      let theXList = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+      theXList.forEach((e, i) => {
+        let x = document.createElement("p");
+        x.style.height = "100%";
+        x.style.width = "100%";
+        x.style.display = "grid";
+        x.style.justifyItems = "center";
+        x.style.alignItems = "center";
+        x.style.border = "solid 1px white";
+        x.style.margin = "0";
+        document.querySelector("section").appendChild(x);
+      });
+
+      let reset = document.createElement("h2")
+        reset.style.position = "absolute"
+        reset.style.cursor = "pointer"
+        reset.style.backgroundColor = "white"
+        document.querySelector("section").appendChild(reset);
+
+      Selectplayer();
+    });
+
+    /* list of arrays with winning conditions. Each array coresponds to a layout on the board. the number matches the index on the board, index 0-8*/
+    let winning = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+    /* select player */
+    function Selectplayer(){
+      /* Reset the whole game*/
+        let paragrafs = document.querySelectorAll("p");
+        let player = "";
+        let board = ["", "", "", "", "", "", "", "", ""];
+        /* checks weather the game is running or not, 0 is running, 1 is stopped. */
+        let gamestate = 0
+        /* checks who turn is it. X or O */
+        let currentplayer = "";
+        /* empties the gameboard  */
+        paragrafs.forEach(e =>{
+            e.innerText = ""
+        })
+        /* hide the headline which shows the winner */
+        document.querySelector("h2").style.display = "none"
+        /* changes the currenplayer and starts the game, depended on which button is clicked  */
+        document.querySelector(".playx").addEventListener("click", () => {
+            currentplayer = "x"
+            board = ["", "", "", "", "", "", "", "", ""];
+            startGame(paragrafs, currentplayer, gamestate, board)
+        })
+        document.querySelector(".playo").addEventListener("click", () => {
+            currentplayer = "o"
+            board = ["", "", "", "", "", "", "", "", ""];
+            startGame(paragrafs, currentplayer, gamestate, board, player)
+        })
+    }
+
+    /* Game */
+    function startGame(paragrafs, currentplayer, gamestate, board, player) {
+      /* listens to all the avalible fields on the board. */
+      paragrafs.forEach((e, i) => {
+        e.addEventListener("click", () => {
+          console.log("p clicked");
+          /* if the player has pick X or O and wether the gamestate i on or off. */
+          if (currentplayer == "x" && gamestate == 0) {
+            console.log("player X turn");
+            /* prevent a player from overwriting an already selected field */
+            if (board[i].includes("x") || board[i].includes("o")) {
+              console.log("field is full");
+              /* fills in the selected field with X and changes the currenplayer to o */
+            } else if (board[i].includes("")) {
+              board[i] = "x";
+              e.innerText = "x";
+              console.log(board + " playerx played");
+              currentplayer = "o";
+
+              /* checks win conditions */
+              winning.forEach((list, listIndex) => {
+                console.log("got this far" + board);
+                /* if each of the numnbers in one of the array i the winning variable is equal to "X" on the board the x wins*/
+                if (
+                  board[list[0]] == "x" &&
+                  board[list[1]] == "x" &&
+                  board[list[2]] == "x"
+                ) {
+                  /* stops the game and start the function win. changes gamestate to 1(stopped) */
+                  console.log("X wins");
+                  gamestate = 1
+                  player = "PLayer X wins"
+                  win(player)
+                }
+              });
+            }
+          } 
+          /* Does the same a the one above, but with "O" */
+          else if (currentplayer == "o" && gamestate == 0) {
+            console.log("player O turn");
+            if (board[i].includes("x") || board[i].includes("o")) {
+              console.log("field is full");
+              playerX(paragrafs);
+            } else if (board[i].includes("")) {
+              board[i] = "o";
+              e.innerText = "o";
+              console.log(board + " playerO played");
+              currentplayer = "x";
+
+              /* checks win conditions */
+              winning.forEach((list, listIndex) => {
+                console.log("got this far" + board);
+
+                if (
+                  board[list[0]] == "o" &&
+                  board[list[1]] == "o" &&
+                  board[list[2]] == "o"
+                ) {
+                  console.log("O wins");
+                  gamestate = 1
+                  player = "PLayer O wins"
+                  win(player)
+                }
+              });
+            }
+          }
+        });
+      });
+    }
+
+    function win(player) {
+        /* displays the winner text, with at correct player. And resets the game when the titel is clicked. */
+        document.querySelector("h2").innerText = `${player}`
+        document.querySelector("h2").style.display = "block"
+        document.querySelector("h2").addEventListener("click", () => {
+            Selectplayer()
+        })
+    }
+
+   /*  function win() {
+        alert("player wins")
+    } */
+  </script>
+</html>
